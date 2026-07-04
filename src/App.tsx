@@ -535,8 +535,8 @@ export default function App() {
           </p>
         </div>
 
-        {/* Center Language Cards - CSS Grid Gap is 100% supported in iOS 12 Safari */}
-        <div className="max-w-4xl mx-auto w-full grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 justify-items-center items-center my-8 md:my-12 z-10">
+        {/* Center Language Cards - Flexbox for 100% iOS 12 Safari compatibility */}
+        <div className="max-w-4xl mx-auto w-full flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6 justify-center items-center my-8 md:my-12 z-10">
           {/* GEORGIAN */}
           <button 
             id="lang-btn-ka"
@@ -578,7 +578,7 @@ export default function App() {
           </div>
           <button 
             onClick={() => triggerPinRequest('admin')}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs text-white/50 hover:text-[#D4AF37] font-mono transition-all duration-300 border border-white/5 hover:border-[#D4AF37]/30 bg-white/[0.02] hover:bg-white/[0.06] backdrop-blur-sm cursor-pointer"
+            className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-xs text-white/50 hover:text-[#D4AF37] font-mono transition-all duration-300 border border-white/5 hover:border-[#D4AF37]/30 bg-white/[0.02] hover:bg-white/[0.06] backdrop-blur-sm cursor-pointer"
           >
             <Lock className="w-3.5 h-3.5" />
             ADMIN PANEL
@@ -1338,7 +1338,7 @@ export default function App() {
               </div>
 
               {/* PIN Code Circles */}
-              <div className="flex justify-center gap-4 mb-6">
+              <div className="flex justify-center space-x-4 mb-6">
                 {[0, 1, 2, 3].map((idx) => (
                   <div 
                     key={idx} 
@@ -1404,7 +1404,7 @@ export default function App() {
               
               {/* Admin Panel Header */}
               <div className="px-6 py-4 border-b border-white/10 bg-white/[0.02] backdrop-blur-md flex items-center justify-between">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center">
                     <Settings className="w-5 h-5 text-[#D4AF37]" />
                   </div>
@@ -1417,7 +1417,7 @@ export default function App() {
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center space-x-3">
                   <button
                     onClick={handleResetToDefaultMenu}
                     className="px-4 py-2 bg-red-500/[0.04] hover:bg-red-500/[0.12] border border-red-500/25 text-red-400 text-xs font-semibold rounded-xl transition-all duration-150 backdrop-blur-sm cursor-pointer uppercase"

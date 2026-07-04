@@ -166,3 +166,18 @@ button, select, input {
 .from-\[\#D4AF37\]\/20 { --tw-gradient-from: rgba(212, 175, 55, 0.2) !important; }
 .to-\[\#D4AF37\]\/5 { --tw-gradient-to: rgba(212, 175, 55, 0.05) !important; }
 
+/* Legacy grid gap support for older iOS Safari (such as iOS 12) */
+.gap-3 {
+  grid-gap: 12px !important;
+  -webkit-grid-gap: 12px !important;
+}
+.gap-4 {
+  grid-gap: 16px !important;
+  -webkit-grid-gap: 16px !important;
+}
+.gap-6 {
+  grid-gap: 24px !important;
+  -webkit-grid-gap: 24px !important;
+}
+
+
