@@ -31,23 +31,43 @@ import {
 } from './types';
 import { INITIAL_MENU_ITEMS, LOCAL_TRANSLATIONS } from './data';
 
+const safeLocalStorage = {
+  getItem: (key: string): string | null => {
+    try {
+      return localStorage.getItem(key);
+    } catch (e) {
+      return null;
+    }
+  },
+  setItem: (key: string, value: string): void => {
+    try {
+      localStorage.setItem(key, value);
+    } catch (e) {}
+  },
+  removeItem: (key: string): void => {
+    try {
+      localStorage.removeItem(key);
+    } catch (e) {}
+  }
+};
+
 export default function App() {
   // --- 1. STATE MANAGEMENT ---
   const [selectedLanguage, setSelectedLanguage] = useState<'ka' | 'en' | 'ru' | null>(() => {
-    const saved = localStorage.getItem('bc_lang');
+    const saved = safeLocalStorage.getItem('bc_lang');
     return (saved as 'ka' | 'en' | 'ru') || null;
   });
 
   const [activeCategory, setActiveCategory] = useState<CategoryType>('oysters');
   const [activeWineSubCategory, setActiveWineSubCategory] = useState<WineSubCategoryType>('all');
   const [cart, setCart] = useState<CartItem[]>(() => {
-    const saved = localStorage.getItem('bc_cart');
+    const saved = safeLocalStorage.getItem('bc_cart');
     return saved ? JSON.parse(saved) : [];
   });
 
   // Dynamic menu items loaded from default list + custom added items
   const [menuItems, setMenuItems] = useState<MenuItemWithStrings[]>(() => {
-    const saved = localStorage.getItem('bc_custom_menu');
+    const saved = safeLocalStorage.getItem('bc_custom_menu');
     if (saved) {
       try {
         return JSON.parse(saved);
@@ -60,7 +80,7 @@ export default function App() {
 
   // Stop list mapping (itemId -> isStopped)
   const [stopList, setStopList] = useState<Record<number, boolean>>(() => {
-    const saved = localStorage.getItem('bc_stop_list');
+    const saved = safeLocalStorage.getItem('bc_stop_list');
     return saved ? JSON.parse(saved) : {};
   });
 
@@ -99,22 +119,22 @@ export default function App() {
   // Local state persistence
   useEffect(() => {
     if (selectedLanguage) {
-      localStorage.setItem('bc_lang', selectedLanguage);
+      safeLocalStorage.setItem('bc_lang', selectedLanguage);
     } else {
-      localStorage.removeItem('bc_lang');
+      safeLocalStorage.removeItem('bc_lang');
     }
   }, [selectedLanguage]);
 
   useEffect(() => {
-    localStorage.setItem('bc_cart', JSON.stringify(cart));
+    safeLocalStorage.setItem('bc_cart', JSON.stringify(cart));
   }, [cart]);
 
   useEffect(() => {
-    localStorage.setItem('bc_custom_menu', JSON.stringify(menuItems));
+    safeLocalStorage.setItem('bc_custom_menu', JSON.stringify(menuItems));
   }, [menuItems]);
 
   useEffect(() => {
-    localStorage.setItem('bc_stop_list', JSON.stringify(stopList));
+    safeLocalStorage.setItem('bc_stop_list', JSON.stringify(stopList));
   }, [stopList]);
 
   // Translate dictionary helper
@@ -309,8 +329,8 @@ export default function App() {
     if (window.confirm("Are you sure you want to reset the menu database to default?")) {
       setMenuItems(INITIAL_MENU_ITEMS);
       setStopList({});
-      localStorage.removeItem('bc_custom_menu');
-      localStorage.removeItem('bc_stop_list');
+      safeLocalStorage.removeItem('bc_custom_menu');
+      safeLocalStorage.removeItem('bc_stop_list');
     }
   };
 
@@ -496,58 +516,58 @@ export default function App() {
   // --- 6. RENDER SCREEN: WELCOME / LANGUAGE SELECTOR ---
   if (!selectedLanguage) {
     return (
-      <div id="welcome-screen" className="relative flex flex-col justify-between w-full h-full bg-[#0A0A0A] px-8 py-12 md:py-20 select-none overflow-hidden">
+      <div id="welcome-screen" className="relative flex flex-col justify-between w-full min-h-full bg-[#0A0A0A] px-6 py-8 md:py-16 select-none overflow-y-auto">
         {/* Glowing Ambient Background Circles for Frosted Glass Depth */}
         <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-[#D4AF37]/8 rounded-full blur-[140px] pointer-events-none animate-pulse" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-[#D4AF37]/6 rounded-full blur-[140px] pointer-events-none" />
         <div className="absolute top-[40%] right-[30%] w-[40%] h-[40%] bg-white/5 rounded-full blur-[120px] pointer-events-none" />
 
         {/* Top Header Section */}
-        <div className="flex flex-col items-center justify-center text-center mt-6 z-10">
-          <div className="flex items-center justify-center w-24 h-24 mb-6 rounded-full border border-white/10 bg-white/[0.04] backdrop-blur-md shadow-2xl shadow-black/40">
-            <Cat className="w-12 h-12 text-[#D4AF37]" strokeWidth={1.5} />
+        <div className="flex flex-col items-center justify-center text-center mt-4 md:mt-6 z-10">
+          <div className="flex items-center justify-center w-16 h-16 md:w-24 md:h-24 mb-4 md:mb-6 rounded-full border border-white/10 bg-white/[0.04] backdrop-blur-md shadow-2xl shadow-black/40">
+            <Cat className="w-8 h-8 md:w-12 md:h-12 text-[#D4AF37]" strokeWidth={1.5} />
           </div>
-          <h1 className="font-serif text-5xl md:text-7xl font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-white via-[#D4AF37] to-white mb-2 uppercase">
+          <h1 className="font-serif text-4xl md:text-7xl font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-white via-[#D4AF37] to-white mb-2 uppercase">
             Black Cat
           </h1>
-          <p className="font-serif text-lg md:text-xl text-white/50 tracking-widest italic">
+          <p className="font-serif text-sm md:text-xl text-white/50 tracking-widest italic">
             ბისტრო • BISTRO • БИСТРО
           </p>
         </div>
 
         {/* Center Language Cards - Frosted Glass Panels */}
-        <div className="max-w-4xl mx-auto w-full flex flex-col md:flex-row gap-6 justify-center items-center my-12 z-10">
+        <div className="max-w-4xl mx-auto w-full flex flex-col md:flex-row gap-4 md:gap-6 justify-center items-center my-8 md:my-12 z-10">
           {/* GEORGIAN */}
           <button 
             id="lang-btn-ka"
             onClick={() => setSelectedLanguage('ka')}
-            className="group relative flex flex-col items-center justify-center w-full md:w-64 h-44 bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-[#D4AF37]/50 rounded-3xl shadow-2xl backdrop-blur-md transition-all duration-300 transform active:scale-95 cursor-pointer overflow-hidden"
+            className="group relative flex flex-row md:flex-col items-center justify-center gap-3.5 w-full md:w-64 h-16 md:h-44 bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-[#D4AF37]/50 rounded-2xl md:rounded-3xl shadow-2xl backdrop-blur-md transition-all duration-300 transform active:scale-95 cursor-pointer overflow-hidden px-6 md:px-0"
           >
             <div className="absolute inset-0 bg-gradient-to-tr from-[#D4AF37]/0 via-[#D4AF37]/4 to-[#D4AF37]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <span className="text-3xl font-medium text-white mb-2 font-sans tracking-wide">ქართული</span>
-            <span className="text-xs text-white/40 font-sans tracking-wider uppercase group-hover:text-[#D4AF37] transition-colors duration-300">ქართული მენიუ</span>
+            <span className="text-xl md:text-3xl font-medium text-white font-sans tracking-wide">ქართული</span>
+            <span className="text-xs text-white/40 font-sans tracking-wider uppercase group-hover:text-[#D4AF37] transition-colors duration-300 md:mt-2">ქართული მენიუ</span>
           </button>
 
           {/* ENGLISH */}
           <button 
             id="lang-btn-en"
             onClick={() => setSelectedLanguage('en')}
-            className="group relative flex flex-col items-center justify-center w-full md:w-64 h-44 bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-[#D4AF37]/50 rounded-3xl shadow-2xl backdrop-blur-md transition-all duration-300 transform active:scale-95 cursor-pointer overflow-hidden"
+            className="group relative flex flex-row md:flex-col items-center justify-center gap-3.5 w-full md:w-64 h-16 md:h-44 bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-[#D4AF37]/50 rounded-2xl md:rounded-3xl shadow-2xl backdrop-blur-md transition-all duration-300 transform active:scale-95 cursor-pointer overflow-hidden px-6 md:px-0"
           >
             <div className="absolute inset-0 bg-gradient-to-tr from-[#D4AF37]/0 via-[#D4AF37]/4 to-[#D4AF37]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <span className="text-3xl font-medium text-white mb-2 font-sans tracking-wide">English</span>
-            <span className="text-xs text-white/40 font-sans tracking-wider uppercase group-hover:text-[#D4AF37] transition-colors duration-300">English Menu</span>
+            <span className="text-xl md:text-3xl font-medium text-white font-sans tracking-wide">English</span>
+            <span className="text-xs text-white/40 font-sans tracking-wider uppercase group-hover:text-[#D4AF37] transition-colors duration-300 md:mt-2">English Menu</span>
           </button>
 
           {/* RUSSIAN */}
           <button 
             id="lang-btn-ru"
             onClick={() => setSelectedLanguage('ru')}
-            className="group relative flex flex-col items-center justify-center w-full md:w-64 h-44 bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-[#D4AF37]/50 rounded-3xl shadow-2xl backdrop-blur-md transition-all duration-300 transform active:scale-95 cursor-pointer overflow-hidden"
+            className="group relative flex flex-row md:flex-col items-center justify-center gap-3.5 w-full md:w-64 h-16 md:h-44 bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-[#D4AF37]/50 rounded-2xl md:rounded-3xl shadow-2xl backdrop-blur-md transition-all duration-300 transform active:scale-95 cursor-pointer overflow-hidden px-6 md:px-0"
           >
             <div className="absolute inset-0 bg-gradient-to-tr from-[#D4AF37]/0 via-[#D4AF37]/4 to-[#D4AF37]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <span className="text-3xl font-medium text-white mb-2 font-sans tracking-wide">Русский</span>
-            <span className="text-xs text-white/40 font-sans tracking-wider uppercase group-hover:text-[#D4AF37] transition-colors duration-300">Русское меню</span>
+            <span className="text-xl md:text-3xl font-medium text-white font-sans tracking-wide">Русский</span>
+            <span className="text-xs text-white/40 font-sans tracking-wider uppercase group-hover:text-[#D4AF37] transition-colors duration-300 md:mt-2">Русское меню</span>
           </button>
         </div>
 
@@ -569,7 +589,7 @@ export default function App() {
         <AnimatePresence>
           {isPinPadOpen && (
             <div className="fixed inset-0 flex items-center justify-center bg-black/80 backdrop-blur-md z-50">
-              <div className="w-80 bg-[#1E1E1E] border border-[#D4AF37]/30 rounded-3xl p-6 shadow-2xl relative">
+              <div className="w-full max-w-[320px] mx-4 bg-[#1E1E1E] border border-[#D4AF37]/30 rounded-3xl p-6 shadow-2xl relative">
                 <button 
                   onClick={() => setIsPinPadOpen(false)}
                   className="absolute top-4 right-4 text-gray-400 hover:text-white cursor-pointer"
@@ -650,51 +670,52 @@ export default function App() {
       <div className="absolute top-[35%] left-[25%] w-[40%] h-[40%] bg-[#D4AF37]/3 rounded-full blur-[110px] pointer-events-none" />
 
       {/* 7.1 TOP NAVIGATION HEADER - Frosted Glass Glassmorphism */}
-      <header className="w-full h-20 border-b border-white/10 bg-white/[0.02] backdrop-blur-xl px-6 flex items-center justify-between shadow-lg relative z-10">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full border border-white/10 bg-white/[0.04] backdrop-blur-md flex items-center justify-center">
-            <Cat className="w-5 h-5 text-[#D4AF37]" />
+      <header className="w-full h-20 border-b border-white/10 bg-white/[0.02] backdrop-blur-xl px-4 sm:px-6 flex items-center justify-between shadow-lg relative z-10 shrink-0">
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-white/10 bg-white/[0.04] backdrop-blur-md flex items-center justify-center">
+            <Cat className="w-4.5 h-4.5 sm:w-5 sm:h-5 text-[#D4AF37]" />
           </div>
           <div>
-            <h1 className="font-serif text-2xl font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-white to-[#D4AF37] uppercase">
+            <h1 className="font-serif text-xl sm:text-2xl font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-white to-[#D4AF37] uppercase">
               Black Cat
             </h1>
-            <p className="text-[10px] font-serif text-white/40 tracking-widest uppercase italic">
+            <p className="text-[10px] font-serif text-white/40 tracking-widest uppercase italic sm:block hidden">
               Bistro Interactive Table Menu
             </p>
           </div>
         </div>
 
         {/* Right Controls: Flags, Info, and Hidden Admin Zone */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           
           {/* Quick Language Toggle */}
-          <div className="flex items-center gap-1.5 bg-white/[0.03] backdrop-blur-sm border border-white/10 px-2.5 py-1.5 rounded-xl">
+          <div className="flex items-center gap-1 bg-white/[0.03] backdrop-blur-sm border border-white/10 px-2 sm:px-2.5 py-1.5 rounded-xl">
             <Languages className="w-3.5 h-3.5 text-white/50" />
             <select
               value={selectedLanguage}
               onChange={(e) => setSelectedLanguage(e.target.value as 'ka' | 'en' | 'ru')}
-              className="bg-transparent text-xs text-white/80 focus:outline-none border-none pr-1 font-medium cursor-pointer"
+              className="bg-transparent text-[11px] sm:text-xs text-white/80 focus:outline-none border-none pr-1 font-medium cursor-pointer"
             >
-              <option value="ka" className="bg-[#1E1E1E] text-white">ქართული</option>
-              <option value="en" className="bg-[#1E1E1E] text-white">English</option>
-              <option value="ru" className="bg-[#1E1E1E] text-white">Русский</option>
+              <option value="ka" className="bg-[#1E1E1E] text-white">KA</option>
+              <option value="en" className="bg-[#1E1E1E] text-white">EN</option>
+              <option value="ru" className="bg-[#1E1E1E] text-white">RU</option>
             </select>
           </div>
 
           {/* Quick Reset Back Button (Sends to Lang selection via Manager PIN) */}
           <button 
             onClick={() => triggerPinRequest('reset')}
-            className="flex items-center gap-1 bg-white/[0.02] hover:bg-red-500/10 active:bg-red-500/20 border border-white/10 hover:border-red-500/30 px-3 py-2 rounded-xl text-xs text-white/70 hover:text-red-400 transition-all duration-200 backdrop-blur-sm cursor-pointer"
+            className="flex items-center gap-1 bg-white/[0.02] hover:bg-red-500/10 active:bg-red-500/20 border border-white/10 hover:border-red-500/30 p-2 sm:px-3 sm:py-2 rounded-xl text-xs text-white/70 hover:text-red-400 transition-all duration-200 backdrop-blur-sm cursor-pointer"
+            title={t.clearMenu}
           >
-            <Lock className="w-3 h-3" />
-            <span className="font-medium">{t.clearMenu}</span>
+            <Lock className="w-3.5 h-3.5 sm:w-3 sm:h-3" />
+            <span className="font-medium sm:inline hidden">{t.clearMenu}</span>
           </button>
 
           {/* Subtle / Hidden Corner Zone for Admin Panel */}
           <button 
             onClick={() => triggerPinRequest('admin')}
-            className="w-10 h-10 rounded-xl bg-white/[0.02] hover:bg-white/[0.08] border border-white/10 hover:border-[#D4AF37]/40 flex items-center justify-center transition-all duration-200 backdrop-blur-sm cursor-pointer text-white/60 hover:text-[#D4AF37]"
+            className="w-8.5 h-8.5 sm:w-10 sm:h-10 rounded-xl bg-white/[0.02] hover:bg-white/[0.08] border border-white/10 hover:border-[#D4AF37]/40 flex items-center justify-center transition-all duration-200 backdrop-blur-sm cursor-pointer text-white/60 hover:text-[#D4AF37]"
             title="Administrator Settings"
           >
             <Settings className="w-4 h-4" />
@@ -706,7 +727,7 @@ export default function App() {
       <div className="flex-1 w-full flex overflow-hidden">
         
         {/* LEFT SIDEBAR (MAIN CATEGORIES) - Frosted Glass Navigation */}
-        <nav className="w-64 border-r border-white/10 bg-white/[0.02] backdrop-blur-xl py-6 flex flex-col justify-between overflow-y-auto z-10">
+        <nav className="w-64 border-r border-white/10 bg-white/[0.02] backdrop-blur-xl py-6 md:flex hidden flex-col justify-between overflow-y-auto z-10">
           <div className="flex flex-col gap-2.5 px-4">
             
             {/* Category: Oysters */}
@@ -784,7 +805,7 @@ export default function App() {
         <main className="flex-1 flex flex-col bg-transparent overflow-hidden relative z-10">
           
           {/* Active Category Header */}
-          <div className="px-8 pt-6 pb-4 flex flex-col gap-1 shrink-0">
+          <div className="px-4 md:px-8 pt-6 pb-4 flex flex-col gap-1 shrink-0">
             <div className="flex items-center gap-2 text-xs font-serif text-[#D4AF37] tracking-wider uppercase">
               <Sparkles className="w-3.5 h-3.5" />
               <span>{t.welcome}</span>
@@ -796,6 +817,58 @@ export default function App() {
             </h2>
           </div>
 
+          {/* MOBILE MAIN CATEGORIES FILTER BAR - VISIBLE ONLY ON MOBILE */}
+          <div className="md:hidden px-4 pb-4 flex items-center gap-2 overflow-x-auto shrink-0 no-scrollbar">
+            {/* Oysters */}
+            <button
+              onClick={() => { setActiveCategory('oysters'); setActiveWineSubCategory('all'); }}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border transition-all duration-200 cursor-pointer text-xs font-medium tracking-wide whitespace-nowrap shrink-0 ${
+                activeCategory === 'oysters'
+                ? 'bg-white/[0.08] border-[#D4AF37]/50 text-[#D4AF37] font-semibold'
+                : 'bg-white/[0.02] border-white/10 text-white/50'
+              }`}
+            >
+              <UtensilsCrossed className="w-3.5 h-3.5" />
+              <span>{t.oysters}</span>
+            </button>
+            {/* Brunch */}
+            <button
+              onClick={() => { setActiveCategory('brunch'); setActiveWineSubCategory('all'); }}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border transition-all duration-200 cursor-pointer text-xs font-medium tracking-wide whitespace-nowrap shrink-0 ${
+                activeCategory === 'brunch'
+                ? 'bg-white/[0.08] border-[#D4AF37]/50 text-[#D4AF37] font-semibold'
+                : 'bg-white/[0.02] border-white/10 text-white/50'
+              }`}
+            >
+              <Layers className="w-3.5 h-3.5" />
+              <span>{t.brunch}</span>
+            </button>
+            {/* Wine */}
+            <button
+              onClick={() => { setActiveCategory('wine'); }}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border transition-all duration-200 cursor-pointer text-xs font-medium tracking-wide whitespace-nowrap shrink-0 ${
+                activeCategory === 'wine'
+                ? 'bg-white/[0.08] border-[#D4AF37]/50 text-[#D4AF37] font-semibold'
+                : 'bg-white/[0.02] border-white/10 text-white/50'
+              }`}
+            >
+              <Wine className="w-3.5 h-3.5" />
+              <span>{t.wine}</span>
+            </button>
+            {/* Drinks */}
+            <button
+              onClick={() => { setActiveCategory('drinks'); setActiveWineSubCategory('all'); }}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border transition-all duration-200 cursor-pointer text-xs font-medium tracking-wide whitespace-nowrap shrink-0 ${
+                activeCategory === 'drinks'
+                ? 'bg-white/[0.08] border-[#D4AF37]/50 text-[#D4AF37] font-semibold'
+                : 'bg-white/[0.02] border-white/10 text-white/50'
+              }`}
+            >
+              <Coffee className="w-3.5 h-3.5" />
+              <span>{t.drinks}</span>
+            </button>
+          </div>
+
           {/* TWO-LEVEL CATEGORY NAVIGATION (Wine Subcategories filter bar) */}
           <AnimatePresence mode="wait">
             {activeCategory === 'wine' && (
@@ -804,13 +877,13 @@ export default function App() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.2 }}
-                className="px-8 pb-4 flex items-center gap-2 overflow-x-auto shrink-0 no-scrollbar"
+                className="px-4 md:px-8 pb-4 flex items-center gap-2 overflow-x-auto shrink-0 no-scrollbar"
               >
                 {(Object.keys(t.subCategories) as WineSubCategoryType[]).map((subKey) => (
                   <button
                     key={subKey}
                     onClick={() => setActiveWineSubCategory(subKey)}
-                    className={`px-4 py-2 rounded-xl text-xs font-medium tracking-wide whitespace-nowrap border transition-all duration-200 cursor-pointer ${
+                    className={`px-4 py-2 rounded-xl text-xs font-medium tracking-wide whitespace-nowrap border transition-all duration-200 cursor-pointer shrink-0 ${
                       activeWineSubCategory === subKey
                       ? 'bg-[#D4AF37] border-[#D4AF37] text-black font-semibold shadow-md shadow-[#D4AF37]/20'
                       : 'bg-white/[0.04] border-white/10 text-white/60 hover:text-white hover:bg-white/[0.08]'
@@ -824,9 +897,9 @@ export default function App() {
           </AnimatePresence>
 
           {/* GRID OF ITEM CARDS */}
-          <div className="flex-1 overflow-y-auto px-8 pb-32">
+          <div className="flex-1 overflow-y-auto px-4 md:px-8 pb-32">
             {sections.map((section) => (
-              <div key={section.id} className="mb-12 last:mb-0">
+              <div key={section.id} className="mb-8 sm:mb-12 last:mb-0">
                 {section.title && (
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 mb-6 border-b border-white/10 relative">
                     <div className="flex items-center gap-4">
@@ -848,7 +921,7 @@ export default function App() {
                   </div>
                 )}
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 pt-2">
                   <AnimatePresence>
                     {section.items.map((item) => {
                       const isStopped = stopList[item.id];
@@ -871,7 +944,7 @@ export default function App() {
                           }`}
                         >
                           {/* Image or Premium Emoji Background */}
-                          <div className="h-44 w-full relative bg-black/40 overflow-hidden shrink-0 flex items-center justify-center">
+                          <div className="h-32 sm:h-44 w-full relative bg-black/40 overflow-hidden shrink-0 flex items-center justify-center">
                             {item.image ? (
                               <img 
                                 src={item.image} 
@@ -895,7 +968,7 @@ export default function App() {
                           </div>
 
                           {/* Content details */}
-                          <div className="p-5 flex-1 flex flex-col justify-between">
+                          <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
                             <div>
                               <div className="flex items-start justify-between gap-2 mb-2">
                                 <h3 className="font-serif text-lg font-bold text-white whitespace-normal group-hover:text-[#D4AF37] transition-colors duration-200 leading-snug">
@@ -1129,7 +1202,7 @@ export default function App() {
                   cart.map((cartItem) => (
                     <div 
                       key={cartItem.cartId}
-                      className="bg-white/[0.03] backdrop-blur-md border border-white/10 p-4 rounded-3xl flex items-center justify-between gap-4 shadow-md transition-all duration-200"
+                      className="bg-white/[0.03] backdrop-blur-md border border-white/10 p-4 rounded-3xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 shadow-md transition-all duration-200"
                     >
                       {/* Left: icon and basic name */}
                       <div className="flex items-center gap-3.5 flex-1 min-w-0">
@@ -1156,7 +1229,7 @@ export default function App() {
                       </div>
 
                       {/* Right: Quantity modifiers & Total */}
-                      <div className="flex items-center gap-4 shrink-0">
+                      <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto border-t sm:border-t-0 border-white/5 pt-2.5 sm:pt-0 shrink-0">
                         
                         {/* Quantity Adjuster */}
                         <div className="flex items-center bg-black/30 backdrop-blur-sm border border-white/10 rounded-xl p-1 gap-1">
@@ -1240,7 +1313,7 @@ export default function App() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="w-80 bg-white/[0.04] backdrop-blur-2xl border border-white/10 rounded-3xl p-6 shadow-2xl relative"
+              className="w-full max-w-[320px] mx-4 bg-white/[0.04] backdrop-blur-2xl border border-white/10 rounded-3xl p-6 shadow-2xl relative"
             >
               <button 
                 onClick={() => { setIsPinPadOpen(false); setPinTarget(null); }}

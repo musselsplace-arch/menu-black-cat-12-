@@ -79,3 +79,90 @@ input[type=number] {
   -webkit-backdrop-filter: blur(64px) !important;
 }
 
+/* Legacy iOS/Safari Button & Input Resets */
+button, select, input {
+  background-color: transparent;
+  color: inherit;
+  border-color: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+}
+
+/* Enable momentum-based touch scrolling */
+.overflow-x-auto, .overflow-y-auto {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Custom Webkit scrollbar adjustments */
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Legacy CSS overrides for Tailwind 4's color-mix() properties */
+/* This guarantees standard RGBA background & border rendering on iOS 12-16 Safari */
+
+/* Background Opacities */
+.bg-white\/\[0\.02\] { background-color: rgba(255, 255, 255, 0.02) !important; }
+.bg-white\/\[0\.03\] { background-color: rgba(255, 255, 255, 0.03) !important; }
+.bg-white\/\[0\.04\] { background-color: rgba(255, 255, 255, 0.04) !important; }
+.bg-white\/\[0\.05\] { background-color: rgba(255, 255, 255, 0.05) !important; }
+.bg-white\/\[0\.06\] { background-color: rgba(255, 255, 255, 0.06) !important; }
+.bg-white\/\[0\.07\] { background-color: rgba(255, 255, 255, 0.07) !important; }
+.bg-white\/\[0\.08\] { background-color: rgba(255, 255, 255, 0.08) !important; }
+.bg-white\/5 { background-color: rgba(255, 255, 255, 0.05) !important; }
+.bg-white\/10 { background-color: rgba(255, 255, 255, 0.1) !important; }
+.bg-white\/20 { background-color: rgba(255, 255, 255, 0.2) !important; }
+
+.bg-black\/30 { background-color: rgba(0, 0, 0, 0.3) !important; }
+.bg-black\/40 { background-color: rgba(0, 0, 0, 0.4) !important; }
+.bg-black\/50 { background-color: rgba(0, 0, 0, 0.5) !important; }
+.bg-black\/60 { background-color: rgba(0, 0, 0, 0.6) !important; }
+.bg-black\/80 { background-color: rgba(0, 0, 0, 0.8) !important; }
+
+/* Gold Accent Opacities (#D4AF37 = rgb(212, 175, 55)) */
+.bg-\[\#D4AF37\]\/8, .bg-\[\#D4AF37\]\/\[0\.08\] { background-color: rgba(212, 175, 55, 0.08) !important; }
+.bg-\[\#D4AF37\]\/10, .bg-\[\#D4AF37\]\/\[0\.1\] { background-color: rgba(212, 175, 55, 0.1) !important; }
+.bg-\[\#D4AF37\]\/20 { background-color: rgba(212, 175, 55, 0.2) !important; }
+
+.border-\[\#D4AF37\]\/30 { border-color: rgba(212, 175, 55, 0.3) !important; }
+.border-\[\#D4AF37\]\/40 { border-color: rgba(212, 175, 55, 0.4) !important; }
+.border-\[\#D4AF37\]\/50 { border-color: rgba(212, 175, 55, 0.5) !important; }
+.border-\[\#D4AF37\]\/60 { border-color: rgba(212, 175, 55, 0.6) !important; }
+
+/* Border Opacities */
+.border-white\/5 { border-color: rgba(255, 255, 255, 0.05) !important; }
+.border-white\/10 { border-color: rgba(255, 255, 255, 0.1) !important; }
+.border-white\/20 { border-color: rgba(255, 255, 255, 0.2) !important; }
+
+/* Text Color Opacities */
+.text-white\/20 { color: rgba(255, 255, 255, 0.2) !important; }
+.text-white\/30 { color: rgba(255, 255, 255, 0.3) !important; }
+.text-white\/40 { color: rgba(255, 255, 255, 0.4) !important; }
+.text-white\/50 { color: rgba(255, 255, 255, 0.5) !important; }
+.text-white\/60 { color: rgba(255, 255, 255, 0.6) !important; }
+.text-white\/70 { color: rgba(255, 255, 255, 0.7) !important; }
+.text-white\/80 { color: rgba(255, 255, 255, 0.8) !important; }
+.text-white\/90 { color: rgba(255, 255, 255, 0.9) !important; }
+
+/* Shadow Opacities */
+.shadow-\[\#D4AF37\]\/5 { --tw-shadow-color: rgba(212, 175, 55, 0.05) !important; }
+.shadow-\[\#D4AF37\]\/10 { --tw-shadow-color: rgba(212, 175, 55, 0.1) !important; }
+.shadow-\[\#D4AF37\]\/20 { --tw-shadow-color: rgba(212, 175, 55, 0.2) !important; }
+
+/* Red Overrides (#EF4444 = rgb(239, 68, 68)) */
+.bg-red-500\/10 { background-color: rgba(239, 68, 68, 0.1) !important; }
+.active\:bg-red-500\/20:active { background-color: rgba(239, 68, 68, 0.2) !important; }
+.hover\:bg-red-500\/10:hover { background-color: rgba(239, 68, 68, 0.1) !important; }
+.hover\:border-red-500\/30:hover { border-color: rgba(239, 68, 68, 0.3) !important; }
+.bg-red-950\/20 { background-color: rgba(69, 10, 10, 0.2) !important; }
+.border-red-500\/20 { border-color: rgba(239, 68, 68, 0.2) !important; }
+
+/* Gradients standard fallback (linear gradients) */
+.from-\[\#D4AF37\]\/20 { --tw-gradient-from: rgba(212, 175, 55, 0.2) !important; }
+.to-\[\#D4AF37\]\/5 { --tw-gradient-to: rgba(212, 175, 55, 0.05) !important; }
+
