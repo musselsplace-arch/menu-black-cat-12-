@@ -16,6 +16,73 @@
           }
         })();
       }
+
+      // Object.fromEntries polyfill
+      if (typeof Object !== 'undefined' && !Object.fromEntries) {
+        Object.fromEntries = function(entries) {
+          if (!entries || !entries[Symbol.iterator]) {
+            throw new TypeError('Object.fromEntries() requires an iterable object');
+          }
+          var obj = {};
+          var iterator = entries[Symbol.iterator]();
+          var next = iterator.next();
+          while (!next.done) {
+            var pair = next.value;
+            if (Object(pair) !== pair) {
+              throw new TypeError('Iterator value ' + pair + ' is not an entry object');
+            }
+            obj[pair[0]] = pair[1];
+            next = iterator.next();
+          }
+          return obj;
+        };
+      }
+
+      // ResizeObserver dummy polyfill
+      if (typeof window !== 'undefined' && !window.ResizeObserver) {
+        window.ResizeObserver = class ResizeObserver {
+          constructor(callback) {
+            this.callback = callback;
+          }
+          observe(target) {
+            if (typeof this.callback === 'function') {
+              try {
+                this.callback([{
+                  target: target,
+                  contentRect: target.getBoundingClientRect()
+                }], this);
+              } catch (e) {}
+            }
+          }
+          unobserve(target) {}
+          disconnect() {}
+        };
+      }
+
+      // IntersectionObserver dummy polyfill
+      if (typeof window !== 'undefined' && !window.IntersectionObserver) {
+        window.IntersectionObserver = class IntersectionObserver {
+          constructor(callback) {
+            this.callback = callback;
+          }
+          observe(target) {
+            if (typeof this.callback === 'function') {
+              setTimeout(() => {
+                try {
+                  this.callback([{
+                    target: target,
+                    isIntersecting: true,
+                    intersectionRatio: 1,
+                    boundingClientRect: target.getBoundingClientRect()
+                  }], this);
+                } catch (e) {}
+              }, 0);
+            }
+          }
+          unobserve(target) {}
+          disconnect() {}
+        };
+      }
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
