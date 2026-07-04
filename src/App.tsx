@@ -255,7 +255,7 @@ export default function App() {
   };
 
   const handleAdminImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const file = e.target.files && e.target.files[0];
     if (file) {
       const url = URL.createObjectURL(file);
       setNewItemForm(prev => ({
@@ -535,13 +535,13 @@ export default function App() {
           </p>
         </div>
 
-        {/* Center Language Cards - Frosted Glass Panels */}
-        <div className="max-w-4xl mx-auto w-full flex flex-col md:flex-row gap-4 md:gap-6 justify-center items-center my-8 md:my-12 z-10">
+        {/* Center Language Cards - CSS Grid Gap is 100% supported in iOS 12 Safari */}
+        <div className="max-w-4xl mx-auto w-full grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 justify-items-center items-center my-8 md:my-12 z-10">
           {/* GEORGIAN */}
           <button 
             id="lang-btn-ka"
             onClick={() => setSelectedLanguage('ka')}
-            className="group relative flex flex-row md:flex-col items-center justify-center gap-3.5 w-full md:w-64 h-16 md:h-44 bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-[#D4AF37]/50 rounded-2xl md:rounded-3xl shadow-2xl backdrop-blur-md transition-all duration-300 transform active:scale-95 cursor-pointer overflow-hidden px-6 md:px-0"
+            className="group relative flex flex-row md:flex-col items-center justify-center space-x-3.5 md:space-x-0 w-full h-16 md:h-44 bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-[#D4AF37]/50 rounded-2xl md:rounded-3xl shadow-2xl backdrop-blur-md transition-all duration-300 transform active:scale-95 cursor-pointer overflow-hidden px-6 md:px-0"
           >
             <div className="absolute inset-0 bg-gradient-to-tr from-[#D4AF37]/0 via-[#D4AF37]/4 to-[#D4AF37]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <span className="text-xl md:text-3xl font-medium text-white font-sans tracking-wide">ქართული</span>
@@ -552,7 +552,7 @@ export default function App() {
           <button 
             id="lang-btn-en"
             onClick={() => setSelectedLanguage('en')}
-            className="group relative flex flex-row md:flex-col items-center justify-center gap-3.5 w-full md:w-64 h-16 md:h-44 bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-[#D4AF37]/50 rounded-2xl md:rounded-3xl shadow-2xl backdrop-blur-md transition-all duration-300 transform active:scale-95 cursor-pointer overflow-hidden px-6 md:px-0"
+            className="group relative flex flex-row md:flex-col items-center justify-center space-x-3.5 md:space-x-0 w-full h-16 md:h-44 bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-[#D4AF37]/50 rounded-2xl md:rounded-3xl shadow-2xl backdrop-blur-md transition-all duration-300 transform active:scale-95 cursor-pointer overflow-hidden px-6 md:px-0"
           >
             <div className="absolute inset-0 bg-gradient-to-tr from-[#D4AF37]/0 via-[#D4AF37]/4 to-[#D4AF37]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <span className="text-xl md:text-3xl font-medium text-white font-sans tracking-wide">English</span>
@@ -563,7 +563,7 @@ export default function App() {
           <button 
             id="lang-btn-ru"
             onClick={() => setSelectedLanguage('ru')}
-            className="group relative flex flex-row md:flex-col items-center justify-center gap-3.5 w-full md:w-64 h-16 md:h-44 bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-[#D4AF37]/50 rounded-2xl md:rounded-3xl shadow-2xl backdrop-blur-md transition-all duration-300 transform active:scale-95 cursor-pointer overflow-hidden px-6 md:px-0"
+            className="group relative flex flex-row md:flex-col items-center justify-center space-x-3.5 md:space-x-0 w-full h-16 md:h-44 bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-[#D4AF37]/50 rounded-2xl md:rounded-3xl shadow-2xl backdrop-blur-md transition-all duration-300 transform active:scale-95 cursor-pointer overflow-hidden px-6 md:px-0"
           >
             <div className="absolute inset-0 bg-gradient-to-tr from-[#D4AF37]/0 via-[#D4AF37]/4 to-[#D4AF37]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <span className="text-xl md:text-3xl font-medium text-white font-sans tracking-wide">Русский</span>
@@ -600,12 +600,12 @@ export default function App() {
                   <div className="w-12 h-12 bg-[#D4AF37]/10 rounded-full flex items-center justify-center mx-auto mb-3 border border-[#D4AF37]/30">
                     <Lock className="w-5 h-5 text-[#D4AF37]" />
                   </div>
-                  <h3 className="text-lg font-serif text-[#D4AF37] font-medium">{t?.managerPin || "Manager PIN"}</h3>
-                  <p className="text-xs text-gray-400 mt-1">{t?.enterPin || "Enter 4-digit PIN Code"}</p>
+                  <h3 className="text-lg font-serif text-[#D4AF37] font-medium">{t.managerPin || "Manager PIN"}</h3>
+                  <p className="text-xs text-gray-400 mt-1">{t.enterPin || "Enter 4-digit PIN Code"}</p>
                 </div>
 
                 {/* PIN Code Circles */}
-                <div className="flex justify-center gap-4 mb-6">
+                <div className="flex justify-center space-x-4 mb-6">
                   {[0, 1, 2, 3].map((idx) => (
                     <div 
                       key={idx} 
@@ -619,7 +619,7 @@ export default function App() {
 
                 {pinError && (
                   <p className="text-xs text-red-500 text-center mb-4 font-sans font-medium animate-bounce">
-                    {t?.incorrectPin || "Incorrect PIN. Please try again."}
+                    {t.incorrectPin || "Incorrect PIN. Please try again."}
                   </p>
                 )}
 
@@ -638,7 +638,7 @@ export default function App() {
                     onClick={() => setIsPinPadOpen(false)}
                     className="h-12 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-xs font-semibold text-red-400 transition-all duration-100 cursor-pointer flex items-center justify-center"
                   >
-                    {t?.cancel || "Cancel"}
+                    {t.cancel || "Cancel"}
                   </button>
                   <button
                     onClick={() => handlePinKeyPress('0')}
@@ -671,7 +671,7 @@ export default function App() {
 
       {/* 7.1 TOP NAVIGATION HEADER - Frosted Glass Glassmorphism */}
       <header className="w-full h-20 border-b border-white/10 bg-white/[0.02] backdrop-blur-xl px-4 sm:px-6 flex items-center justify-between shadow-lg relative z-10 shrink-0">
-        <div className="flex items-center gap-2.5 sm:gap-3">
+        <div className="flex items-center space-x-2.5 sm:space-x-3">
           <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-white/10 bg-white/[0.04] backdrop-blur-md flex items-center justify-center">
             <Cat className="w-4.5 h-4.5 sm:w-5 sm:h-5 text-[#D4AF37]" />
           </div>
@@ -686,10 +686,10 @@ export default function App() {
         </div>
 
         {/* Right Controls: Flags, Info, and Hidden Admin Zone */}
-        <div className="flex items-center gap-2 sm:gap-4">
+        <div className="flex items-center space-x-2 sm:space-x-4">
           
           {/* Quick Language Toggle */}
-          <div className="flex items-center gap-1 bg-white/[0.03] backdrop-blur-sm border border-white/10 px-2 sm:px-2.5 py-1.5 rounded-xl">
+          <div className="flex items-center space-x-1 bg-white/[0.03] backdrop-blur-sm border border-white/10 px-2 sm:px-2.5 py-1.5 rounded-xl">
             <Languages className="w-3.5 h-3.5 text-white/50" />
             <select
               value={selectedLanguage}
@@ -705,7 +705,7 @@ export default function App() {
           {/* Quick Reset Back Button (Sends to Lang selection via Manager PIN) */}
           <button 
             onClick={() => triggerPinRequest('reset')}
-            className="flex items-center gap-1 bg-white/[0.02] hover:bg-red-500/10 active:bg-red-500/20 border border-white/10 hover:border-red-500/30 p-2 sm:px-3 sm:py-2 rounded-xl text-xs text-white/70 hover:text-red-400 transition-all duration-200 backdrop-blur-sm cursor-pointer"
+            className="flex items-center space-x-1 bg-white/[0.02] hover:bg-red-500/10 active:bg-red-500/20 border border-white/10 hover:border-red-500/30 p-2 sm:px-3 sm:py-2 rounded-xl text-xs text-white/70 hover:text-red-400 transition-all duration-200 backdrop-blur-sm cursor-pointer"
             title={t.clearMenu}
           >
             <Lock className="w-3.5 h-3.5 sm:w-3 sm:h-3" />
@@ -728,12 +728,12 @@ export default function App() {
         
         {/* LEFT SIDEBAR (MAIN CATEGORIES) - Frosted Glass Navigation */}
         <nav className="w-64 border-r border-white/10 bg-white/[0.02] backdrop-blur-xl py-6 md:flex hidden flex-col justify-between overflow-y-auto z-10">
-          <div className="flex flex-col gap-2.5 px-4">
+          <div className="flex flex-col space-y-2.5 px-4">
             
             {/* Category: Oysters */}
             <button
               onClick={() => { setActiveCategory('oysters'); setActiveWineSubCategory('all'); }}
-              className={`flex items-center gap-3.5 w-full px-4 py-3.5 rounded-2xl transition-all duration-250 cursor-pointer ${
+              className={`flex items-center space-x-3.5 w-full px-4 py-3.5 rounded-2xl transition-all duration-250 cursor-pointer ${
                 activeCategory === 'oysters' 
                 ? 'bg-white/[0.06] border border-[#D4AF37]/40 text-[#D4AF37] shadow-lg shadow-black/20 backdrop-blur-md font-bold' 
                 : 'bg-transparent border border-transparent text-white/50 hover:text-white hover:bg-white/[0.04]'
@@ -748,7 +748,7 @@ export default function App() {
             {/* Category: Brunch & Salads */}
             <button
               onClick={() => { setActiveCategory('brunch'); setActiveWineSubCategory('all'); }}
-              className={`flex items-center gap-3.5 w-full px-4 py-3.5 rounded-2xl transition-all duration-250 cursor-pointer ${
+              className={`flex items-center space-x-3.5 w-full px-4 py-3.5 rounded-2xl transition-all duration-250 cursor-pointer ${
                 activeCategory === 'brunch' 
                 ? 'bg-white/[0.06] border border-[#D4AF37]/40 text-[#D4AF37] shadow-lg shadow-black/20 backdrop-blur-md font-bold' 
                 : 'bg-transparent border border-transparent text-white/50 hover:text-white hover:bg-white/[0.04]'
@@ -763,7 +763,7 @@ export default function App() {
             {/* Category: Wine Menu */}
             <button
               onClick={() => { setActiveCategory('wine'); }}
-              className={`flex items-center gap-3.5 w-full px-4 py-3.5 rounded-2xl transition-all duration-250 cursor-pointer ${
+              className={`flex items-center space-x-3.5 w-full px-4 py-3.5 rounded-2xl transition-all duration-250 cursor-pointer ${
                 activeCategory === 'wine' 
                 ? 'bg-white/[0.06] border border-[#D4AF37]/40 text-[#D4AF37] shadow-lg shadow-black/20 backdrop-blur-md font-bold' 
                 : 'bg-transparent border border-transparent text-white/50 hover:text-white hover:bg-white/[0.04]'
@@ -778,7 +778,7 @@ export default function App() {
             {/* Category: Drinks & Sweets */}
             <button
               onClick={() => { setActiveCategory('drinks'); setActiveWineSubCategory('all'); }}
-              className={`flex items-center gap-3.5 w-full px-4 py-3.5 rounded-2xl transition-all duration-250 cursor-pointer ${
+              className={`flex items-center space-x-3.5 w-full px-4 py-3.5 rounded-2xl transition-all duration-250 cursor-pointer ${
                 activeCategory === 'drinks' 
                 ? 'bg-white/[0.06] border border-[#D4AF37]/40 text-[#D4AF37] shadow-lg shadow-black/20 backdrop-blur-md font-bold' 
                 : 'bg-transparent border border-transparent text-white/50 hover:text-white hover:bg-white/[0.04]'
@@ -805,8 +805,8 @@ export default function App() {
         <main className="flex-1 flex flex-col bg-transparent overflow-hidden relative z-10">
           
           {/* Active Category Header */}
-          <div className="px-4 md:px-8 pt-6 pb-4 flex flex-col gap-1 shrink-0">
-            <div className="flex items-center gap-2 text-xs font-serif text-[#D4AF37] tracking-wider uppercase">
+          <div className="px-4 md:px-8 pt-6 pb-4 flex flex-col space-y-1 shrink-0">
+            <div className="flex items-center space-x-2 text-xs font-serif text-[#D4AF37] tracking-wider uppercase">
               <Sparkles className="w-3.5 h-3.5" />
               <span>{t.welcome}</span>
             </div>
@@ -818,11 +818,11 @@ export default function App() {
           </div>
 
           {/* MOBILE MAIN CATEGORIES FILTER BAR - VISIBLE ONLY ON MOBILE */}
-          <div className="md:hidden px-4 pb-4 flex items-center gap-2 overflow-x-auto shrink-0 no-scrollbar">
+          <div className="md:hidden px-4 pb-4 flex items-center space-x-2 overflow-x-auto shrink-0 no-scrollbar">
             {/* Oysters */}
             <button
               onClick={() => { setActiveCategory('oysters'); setActiveWineSubCategory('all'); }}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border transition-all duration-200 cursor-pointer text-xs font-medium tracking-wide whitespace-nowrap shrink-0 ${
+              className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl border transition-all duration-200 cursor-pointer text-xs font-medium tracking-wide whitespace-nowrap shrink-0 ${
                 activeCategory === 'oysters'
                 ? 'bg-white/[0.08] border-[#D4AF37]/50 text-[#D4AF37] font-semibold'
                 : 'bg-white/[0.02] border-white/10 text-white/50'
@@ -834,7 +834,7 @@ export default function App() {
             {/* Brunch */}
             <button
               onClick={() => { setActiveCategory('brunch'); setActiveWineSubCategory('all'); }}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border transition-all duration-200 cursor-pointer text-xs font-medium tracking-wide whitespace-nowrap shrink-0 ${
+              className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl border transition-all duration-200 cursor-pointer text-xs font-medium tracking-wide whitespace-nowrap shrink-0 ${
                 activeCategory === 'brunch'
                 ? 'bg-white/[0.08] border-[#D4AF37]/50 text-[#D4AF37] font-semibold'
                 : 'bg-white/[0.02] border-white/10 text-white/50'
@@ -846,7 +846,7 @@ export default function App() {
             {/* Wine */}
             <button
               onClick={() => { setActiveCategory('wine'); }}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border transition-all duration-200 cursor-pointer text-xs font-medium tracking-wide whitespace-nowrap shrink-0 ${
+              className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl border transition-all duration-200 cursor-pointer text-xs font-medium tracking-wide whitespace-nowrap shrink-0 ${
                 activeCategory === 'wine'
                 ? 'bg-white/[0.08] border-[#D4AF37]/50 text-[#D4AF37] font-semibold'
                 : 'bg-white/[0.02] border-white/10 text-white/50'
@@ -858,7 +858,7 @@ export default function App() {
             {/* Drinks */}
             <button
               onClick={() => { setActiveCategory('drinks'); setActiveWineSubCategory('all'); }}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border transition-all duration-200 cursor-pointer text-xs font-medium tracking-wide whitespace-nowrap shrink-0 ${
+              className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl border transition-all duration-200 cursor-pointer text-xs font-medium tracking-wide whitespace-nowrap shrink-0 ${
                 activeCategory === 'drinks'
                 ? 'bg-white/[0.08] border-[#D4AF37]/50 text-[#D4AF37] font-semibold'
                 : 'bg-white/[0.02] border-white/10 text-white/50'
@@ -877,7 +877,7 @@ export default function App() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.2 }}
-                className="px-4 md:px-8 pb-4 flex items-center gap-2 overflow-x-auto shrink-0 no-scrollbar"
+                className="px-4 md:px-8 pb-4 flex items-center space-x-2 overflow-x-auto shrink-0 no-scrollbar"
               >
                 {(Object.keys(t.subCategories) as WineSubCategoryType[]).map((subKey) => (
                   <button
@@ -901,8 +901,8 @@ export default function App() {
             {sections.map((section) => (
               <div key={section.id} className="mb-8 sm:mb-12 last:mb-0">
                 {section.title && (
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 mb-6 border-b border-white/10 relative">
-                    <div className="flex items-center gap-4">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0 md:space-x-4 pb-4 mb-6 border-b border-white/10 relative">
+                    <div className="flex items-center space-x-4">
                       {/* Glowing Golden Badge */}
                       <div className="px-4 py-1.5 rounded-full bg-gradient-to-r from-[#D4AF37]/20 to-[#D4AF37]/5 border border-[#D4AF37]/50 shadow-lg shadow-[#D4AF37]/10 flex items-center justify-center shrink-0">
                         <span className="font-mono text-xs font-bold text-[#D4AF37] tracking-wider uppercase">
@@ -970,7 +970,7 @@ export default function App() {
                           {/* Content details */}
                           <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
                             <div>
-                              <div className="flex items-start justify-between gap-2 mb-2">
+                              <div className="flex items-start justify-between space-x-2 mb-2">
                                 <h3 className="font-serif text-lg font-bold text-white whitespace-normal group-hover:text-[#D4AF37] transition-colors duration-200 leading-snug">
                                   {item.strings[selectedLanguage].title}
                                 </h3>
@@ -988,7 +988,7 @@ export default function App() {
 
                               {/* Oyster serving includes text */}
                               {item.category === 'oysters' && (
-                                <div className="bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl p-3 mb-4 flex items-start gap-2">
+                                <div className="bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl p-3 mb-4 flex items-start space-x-2">
                                   <Info className="w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" />
                                   <p className="text-[10px] text-white/40 italic font-sans leading-tight">
                                     {item.strings[selectedLanguage].extra}
@@ -1000,18 +1000,18 @@ export default function App() {
                             {/* Actions block */}
                             <div className="mt-auto pt-2">
                               {isStopped ? (
-                                <div className="w-full py-2.5 bg-red-950/20 border border-red-500/20 text-red-400 text-center text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 uppercase font-sans">
+                                <div className="w-full py-2.5 bg-red-950/20 border border-red-500/20 text-red-400 text-center text-xs font-semibold rounded-xl flex items-center justify-center space-x-1.5 uppercase font-sans">
                                   <AlertTriangle className="w-4 h-4" />
                                   {t.currentlyUnavailable}
                                 </div>
                               ) : item.category === 'wine' ? (
                                 /* WINE ACTION PANEL: GLASS / BOTTLE SELECTORS */
-                                <div className="flex gap-2.5">
+                                <div className="flex space-x-2.5">
                                   {/* Glass Button */}
-                                  <div className="flex-1 flex flex-col gap-1">
+                                  <div className="flex-1 flex flex-col space-y-1">
                                     <button
                                       onClick={() => handleAddToCart(item, 'glass')}
-                                      className={`py-2 px-1 rounded-xl text-xs font-semibold text-center border transition-all duration-200 cursor-pointer flex flex-col items-center justify-center gap-0.5 ${
+                                      className={`py-2 px-1 rounded-xl text-xs font-semibold text-center border transition-all duration-200 cursor-pointer flex flex-col items-center justify-center space-y-0.5 ${
                                         getItemQuantity(item.id, 'glass') > 0
                                         ? 'bg-[#D4AF37] border-[#D4AF37] text-black font-bold shadow-lg shadow-[#D4AF37]/20'
                                         : 'bg-white/[0.04] border-white/10 text-white/70 hover:text-white hover:bg-white/[0.08]'
@@ -1041,10 +1041,10 @@ export default function App() {
                                   </div>
 
                                   {/* Bottle Button */}
-                                  <div className="flex-1 flex flex-col gap-1">
+                                  <div className="flex-1 flex flex-col space-y-1">
                                     <button
                                       onClick={() => handleAddToCart(item, 'bottle')}
-                                      className={`py-2 px-1 rounded-xl text-xs font-semibold text-center border transition-all duration-200 cursor-pointer flex flex-col items-center justify-center gap-0.5 ${
+                                      className={`py-2 px-1 rounded-xl text-xs font-semibold text-center border transition-all duration-200 cursor-pointer flex flex-col items-center justify-center space-y-0.5 ${
                                         getItemQuantity(item.id, 'bottle') > 0
                                         ? 'bg-[#D4AF37] border-[#D4AF37] text-black font-bold shadow-lg shadow-[#D4AF37]/20'
                                         : 'bg-white/[0.04] border-white/10 text-white/70 hover:text-white hover:bg-white/[0.08]'
@@ -1097,7 +1097,7 @@ export default function App() {
                                   ) : (
                                     <button
                                       onClick={() => handleAddToCart(item, 'standard')}
-                                      className="w-full py-2.5 px-4 bg-white/[0.04] hover:bg-[#D4AF37] border border-white/10 hover:border-[#D4AF37] text-white/90 hover:text-black font-semibold text-xs rounded-xl flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer"
+                                      className="w-full py-2.5 px-4 bg-white/[0.04] hover:bg-[#D4AF37] border border-white/10 hover:border-[#D4AF37] text-white/90 hover:text-black font-semibold text-xs rounded-xl flex items-center justify-center space-x-2 transition-all duration-200 cursor-pointer"
                                     >
                                       <Plus className="w-4 h-4" />
                                       <span>{t.addNewItem ? "დამატება / Add to Selection" : "Add to Selection"}</span>
@@ -1129,7 +1129,7 @@ export default function App() {
                 onClick={() => setIsCartOpen(true)}
               >
                 {/* Left details */}
-                <div className="flex items-center gap-4">
+                <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 rounded-xl bg-[#D4AF37] text-black flex items-center justify-center shadow-lg shadow-[#D4AF37]/20">
                     <ShoppingBag className="w-6 h-6 text-black" strokeWidth={2.5} />
                   </div>
@@ -1147,7 +1147,7 @@ export default function App() {
                 </div>
 
                 {/* Right price and click */}
-                <div className="flex items-center gap-3">
+                <div className="flex items-center space-x-3">
                   <span className="font-serif text-2xl font-bold text-[#D4AF37] font-mono shrink-0">
                     {totalCartPrice}₾
                   </span>
@@ -1175,7 +1175,7 @@ export default function App() {
             >
               {/* Modal Header */}
               <div className="px-6 py-5 border-b border-white/10 flex items-center justify-between bg-white/[0.02] backdrop-blur-md">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center">
                     <ShoppingBag className="w-5 h-5 text-[#D4AF37]" />
                   </div>
@@ -1192,7 +1192,7 @@ export default function App() {
               </div>
 
               {/* Items List */}
-              <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-4">
+              <div className="flex-1 overflow-y-auto p-6 flex flex-col space-y-4">
                 {cart.length === 0 ? (
                   <div className="flex-1 flex flex-col items-center justify-center text-center py-20 text-white/40">
                     <ShoppingBag className="w-16 h-16 text-white/20 mb-4" strokeWidth={1} />
@@ -1202,10 +1202,10 @@ export default function App() {
                   cart.map((cartItem) => (
                     <div 
                       key={cartItem.cartId}
-                      className="bg-white/[0.03] backdrop-blur-md border border-white/10 p-4 rounded-3xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 shadow-md transition-all duration-200"
+                      className="bg-white/[0.03] backdrop-blur-md border border-white/10 p-4 rounded-3xl flex flex-col sm:flex-row sm:items-center justify-between space-y-3 sm:space-y-0 sm:space-x-4 shadow-md transition-all duration-200"
                     >
                       {/* Left: icon and basic name */}
-                      <div className="flex items-center gap-3.5 flex-1 min-w-0">
+                      <div className="flex items-center space-x-3.5 flex-1 min-w-0">
                         {cartItem.item.image ? (
                           <img 
                             src={cartItem.item.image} 
@@ -1219,7 +1219,7 @@ export default function App() {
                           <h4 className="font-serif text-sm font-semibold text-white whitespace-normal leading-snug">
                             {cartItem.item.strings[selectedLanguage].title}
                           </h4>
-                          <span className="text-[10px] uppercase font-bold tracking-wider text-[#D4AF37] flex items-center gap-1 mt-0.5">
+                          <span className="text-[10px] uppercase font-bold tracking-wider text-[#D4AF37] flex items-center space-x-1 mt-0.5">
                             {cartItem.variant === 'glass' && `🍷 ${t.glass}`}
                             {cartItem.variant === 'bottle' && `🍾 ${t.bottle}`}
                             {cartItem.variant === 'standard' && `🍽️ `}
@@ -1229,10 +1229,10 @@ export default function App() {
                       </div>
 
                       {/* Right: Quantity modifiers & Total */}
-                      <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto border-t sm:border-t-0 border-white/5 pt-2.5 sm:pt-0 shrink-0">
+                      <div className="flex items-center justify-between sm:justify-end space-x-4 w-full sm:w-auto border-t sm:border-t-0 border-white/5 pt-2.5 sm:pt-0 shrink-0">
                         
                         {/* Quantity Adjuster */}
-                        <div className="flex items-center bg-black/30 backdrop-blur-sm border border-white/10 rounded-xl p-1 gap-1">
+                        <div className="flex items-center bg-black/30 backdrop-blur-sm border border-white/10 rounded-xl p-1 space-x-1">
                           <button
                             onClick={() => handleUpdateQuantity(cartItem.cartId, -1)}
                             className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/5 text-gray-400 hover:text-red-400 transition-colors duration-150 cursor-pointer"
@@ -1270,7 +1270,7 @@ export default function App() {
               </div>
 
               {/* Sticky Summary Bottom Box */}
-              <div className="p-6 border-t border-white/10 bg-white/[0.02] backdrop-blur-md flex flex-col gap-5">
+              <div className="p-6 border-t border-white/10 bg-white/[0.02] backdrop-blur-md flex flex-col space-y-5">
                 <div className="flex items-center justify-between">
                   <span className="font-serif text-lg text-white/50 font-medium uppercase tracking-wide">
                     {t.total}
@@ -1280,7 +1280,7 @@ export default function App() {
                   </span>
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex space-x-3">
                   {/* Cancel / Close button */}
                   <button
                     onClick={() => setIsCartOpen(false)}
@@ -1293,7 +1293,7 @@ export default function App() {
                   {/* Clear Menu & Send back button (Waiters code action) */}
                   <button
                     onClick={() => triggerPinRequest('reset')}
-                    className="py-3.5 px-5 bg-red-500/[0.04] hover:bg-red-500/[0.12] active:bg-red-500/[0.18] border border-red-500/30 text-red-400 font-semibold text-sm rounded-xl flex items-center gap-2 transition-all duration-150 backdrop-blur-sm cursor-pointer"
+                    className="py-3.5 px-5 bg-red-500/[0.04] hover:bg-red-500/[0.12] active:bg-red-500/[0.18] border border-red-500/30 text-red-400 font-semibold text-sm rounded-xl flex items-center space-x-2 transition-all duration-150 backdrop-blur-sm cursor-pointer"
                   >
                     <Trash2 className="w-4 h-4" />
                     <span>{t.clearMenu}</span>
@@ -1452,7 +1452,7 @@ export default function App() {
                   </div>
 
                   {/* Scrollable list of items to toggle availability */}
-                  <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-2 bg-transparent">
+                  <div className="flex-1 overflow-y-auto p-4 flex flex-col space-y-2 bg-transparent">
                     {adminFilteredItems.map((item) => {
                       const isStopped = stopList[item.id];
                       return (
@@ -1460,7 +1460,7 @@ export default function App() {
                           key={item.id}
                           className="flex items-center justify-between p-3 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm hover:bg-white/[0.06] transition-colors duration-150"
                         >
-                          <div className="flex items-center gap-3 min-w-0">
+                          <div className="flex items-center space-x-3 min-w-0">
                             <span className="text-2xl shrink-0 p-1 bg-white/[0.05] rounded-lg">{item.icon}</span>
                             <div className="min-w-0 flex-1">
                               <h4 className="text-sm font-semibold text-white whitespace-normal leading-snug">
@@ -1473,7 +1473,7 @@ export default function App() {
                           </div>
 
                           {/* Toggle switch for Stop-List */}
-                          <div className="flex items-center gap-3 shrink-0">
+                          <div className="flex items-center space-x-3 shrink-0">
                             <span className={`text-[10px] font-bold uppercase tracking-wider font-mono ${isStopped ? 'text-red-400' : 'text-emerald-400'}`}>
                               {isStopped ? t.unavailable : t.available}
                             </span>
@@ -1495,18 +1495,18 @@ export default function App() {
                 </div>
 
                 {/* Right Side: Form to Add New Items / Categories */}
-                <div className="w-full md:w-96 p-6 overflow-y-auto bg-white/[0.01] backdrop-blur-sm flex flex-col gap-5">
-                  <div className="flex items-center gap-2 text-[#D4AF37] border-b border-[#D4AF37]/20 pb-2 mb-1">
+                <div className="w-full md:w-96 p-6 overflow-y-auto bg-white/[0.01] backdrop-blur-sm flex flex-col space-y-5">
+                  <div className="flex items-center space-x-2 text-[#D4AF37] border-b border-[#D4AF37]/20 pb-2 mb-1">
                     <Plus className="w-5 h-5" />
                     <h4 className="font-serif text-base font-bold uppercase tracking-wide">
                       {t.addNewItem}
                     </h4>
                   </div>
 
-                  <form onSubmit={handleSaveNewItem} className="flex flex-col gap-4">
+                  <form onSubmit={handleSaveNewItem} className="flex flex-col space-y-4">
                     
                     {/* Category Selector */}
-                    <div className="flex flex-col gap-1.5">
+                    <div className="flex flex-col space-y-1.5">
                       <label className="text-[10px] uppercase font-bold tracking-wider text-gray-400">Category</label>
                       <select
                         value={newItemForm.category}
@@ -1521,8 +1521,8 @@ export default function App() {
                     </div>
 
                     {/* Wine Subcategory if Wine */}
-                    <div className="flex flex-col gap-1.5 bg-[#1A1A1A]/40 p-3 rounded-xl border border-white/5">
-                      <label className="flex items-center gap-2 text-[10px] uppercase font-bold tracking-wider text-gray-300">
+                    <div className="flex flex-col space-y-1.5 bg-[#1A1A1A]/40 p-3 rounded-xl border border-white/5">
+                      <label className="flex items-center space-x-2 text-[10px] uppercase font-bold tracking-wider text-gray-300">
                         <input
                           type="checkbox"
                           checked={newItemForm.isWine}
@@ -1533,7 +1533,7 @@ export default function App() {
                       </label>
 
                       {newItemForm.isWine && (
-                        <div className="flex flex-col gap-1.5 mt-2.5 animate-fadeIn">
+                        <div className="flex flex-col space-y-1.5 mt-2.5 animate-fadeIn">
                           <label className="text-[10px] uppercase font-bold tracking-wider text-gray-400">Wine Sub-Category</label>
                           <select
                             value={newItemForm.subCategory}
@@ -1553,7 +1553,7 @@ export default function App() {
 
                     {/* Pricing input fields */}
                     {!newItemForm.isWine ? (
-                      <div className="flex flex-col gap-1.5">
+                      <div className="flex flex-col space-y-1.5">
                         <label className="text-[10px] uppercase font-bold tracking-wider text-white/50">{t.itemPrice}</label>
                         <input
                           type="number"
@@ -1566,7 +1566,7 @@ export default function App() {
                       </div>
                     ) : (
                       <div className="grid grid-cols-2 gap-3">
-                        <div className="flex flex-col gap-1.5">
+                        <div className="flex flex-col space-y-1.5">
                           <label className="text-[10px] uppercase font-bold tracking-wider text-white/50">Glass Price (₾)</label>
                           <input
                             type="number"
@@ -1576,7 +1576,7 @@ export default function App() {
                             required
                           />
                         </div>
-                        <div className="flex flex-col gap-1.5">
+                        <div className="flex flex-col space-y-1.5">
                           <label className="text-[10px] uppercase font-bold tracking-wider text-white/50">Bottle Price (₾)</label>
                           <input
                             type="number"
@@ -1590,7 +1590,7 @@ export default function App() {
                     )}
 
                     {/* Icon Emoji input */}
-                    <div className="flex flex-col gap-1.5">
+                    <div className="flex flex-col space-y-1.5">
                       <label className="text-[10px] uppercase font-bold tracking-wider text-white/50">Visual Emoji Icon</label>
                       <input
                         type="text"
@@ -1603,7 +1603,7 @@ export default function App() {
                     </div>
 
                     {/* Local Image Upload */}
-                    <div className="flex flex-col gap-1.5">
+                    <div className="flex flex-col space-y-1.5">
                       <label className="text-[10px] uppercase font-bold tracking-wider text-white/50">{t.uploadImage}</label>
                       <div className="relative w-full h-11 bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-xl flex items-center justify-center hover:bg-white/[0.08] transition-colors duration-150 cursor-pointer">
                         <input
@@ -1612,7 +1612,7 @@ export default function App() {
                           onChange={handleAdminImageUpload}
                           className="absolute inset-0 opacity-0 cursor-pointer"
                         />
-                        <div className="flex items-center gap-2 text-xs text-white/50 font-semibold">
+                        <div className="flex items-center space-x-2 text-xs text-white/50 font-semibold">
                           <Upload className="w-4 h-4 text-[#D4AF37]" />
                           <span>{newItemForm.imageFile ? newItemForm.imageFile.name : "Select JPG / PNG"}</span>
                         </div>
@@ -1620,10 +1620,10 @@ export default function App() {
                     </div>
 
                     {/* Localized titles input */}
-                    <div className="flex flex-col gap-3 bg-white/[0.02] backdrop-blur-sm p-3.5 rounded-2xl border border-white/10">
+                    <div className="flex flex-col space-y-3 bg-white/[0.02] backdrop-blur-sm p-3.5 rounded-2xl border border-white/10">
                       <div className="text-[10px] uppercase font-bold tracking-wider text-[#D4AF37]">Multilingual Titles (Required)</div>
                       
-                      <div className="flex flex-col gap-1">
+                      <div className="flex flex-col space-y-1">
                         <label className="text-[9px] uppercase tracking-wider text-white/40">Georgian Title</label>
                         <input
                           type="text"
@@ -1635,7 +1635,7 @@ export default function App() {
                         />
                       </div>
 
-                      <div className="flex flex-col gap-1">
+                      <div className="flex flex-col space-y-1">
                         <label className="text-[9px] uppercase tracking-wider text-white/40">English Title</label>
                         <input
                           type="text"
@@ -1647,7 +1647,7 @@ export default function App() {
                         />
                       </div>
 
-                      <div className="flex flex-col gap-1">
+                      <div className="flex flex-col space-y-1">
                         <label className="text-[9px] uppercase tracking-wider text-white/40">Russian Title</label>
                         <input
                           type="text"
@@ -1661,10 +1661,10 @@ export default function App() {
                     </div>
 
                     {/* Localized Descriptions */}
-                    <div className="flex flex-col gap-3 bg-white/[0.02] backdrop-blur-sm p-3.5 rounded-2xl border border-white/10">
+                    <div className="flex flex-col space-y-3 bg-white/[0.02] backdrop-blur-sm p-3.5 rounded-2xl border border-white/10">
                       <div className="text-[10px] uppercase font-bold tracking-wider text-[#D4AF37]">Multilingual Descriptions (Optional)</div>
                       
-                      <div className="flex flex-col gap-1">
+                      <div className="flex flex-col space-y-1">
                         <label className="text-[9px] uppercase tracking-wider text-white/40">Georgian Description</label>
                         <textarea
                           placeholder="გამომცხვარი ხამანწკა..."
@@ -1674,7 +1674,7 @@ export default function App() {
                         />
                       </div>
 
-                      <div className="flex flex-col gap-1">
+                      <div className="flex flex-col space-y-1">
                         <label className="text-[9px] uppercase tracking-wider text-white/40">English Description</label>
                         <textarea
                           placeholder="Baked gourmet oyster..."
@@ -1684,7 +1684,7 @@ export default function App() {
                         />
                       </div>
 
-                      <div className="flex flex-col gap-1">
+                      <div className="flex flex-col space-y-1">
                         <label className="text-[9px] uppercase tracking-wider text-white/40">Russian Description</label>
                         <textarea
                           placeholder="Запеченная устрица..."
@@ -1698,7 +1698,7 @@ export default function App() {
                     {/* Submit Button */}
                     <button
                       type="submit"
-                      className="w-full py-3 bg-[#D4AF37] hover:bg-[#c59b27] text-black font-bold text-sm rounded-xl transition-all duration-150 cursor-pointer shadow-lg shadow-[#D4AF37]/15 mt-2 flex items-center justify-center gap-1.5"
+                      className="w-full py-3 bg-[#D4AF37] hover:bg-[#c59b27] text-black font-bold text-sm rounded-xl transition-all duration-150 cursor-pointer shadow-lg shadow-[#D4AF37]/15 mt-2 flex items-center justify-center space-x-1.5"
                     >
                       <CheckCircle2 className="w-4 h-4" />
                       <span>{t.save}</span>
