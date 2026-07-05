@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import { 
   Cat, 
   ShoppingBag, 
@@ -586,9 +585,8 @@ export default function App() {
         </div>
 
         {/* PIN PAD POPUP on welcome screen */}
-        <AnimatePresence>
-          {isPinPadOpen && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black/80 backdrop-blur-md z-50">
+        {isPinPadOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black/80 z-50">
               <div className="w-full max-w-[320px] mx-4 bg-[#1E1E1E] border border-[#D4AF37]/30 rounded-3xl p-6 shadow-2xl relative">
                 <button 
                   onClick={() => setIsPinPadOpen(false)}
@@ -656,7 +654,6 @@ export default function App() {
               </div>
             </div>
           )}
-        </AnimatePresence>
       </div>
     );
   }
@@ -870,31 +867,25 @@ export default function App() {
           </div>
 
           {/* TWO-LEVEL CATEGORY NAVIGATION (Wine Subcategories filter bar) */}
-          <AnimatePresence mode="wait">
-            {activeCategory === 'wine' && (
-              <motion.div 
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-                className="px-4 md:px-8 pb-4 flex items-center space-x-2 overflow-x-auto shrink-0 no-scrollbar"
-              >
-                {(Object.keys(t.subCategories) as WineSubCategoryType[]).map((subKey) => (
-                  <button
-                    key={subKey}
-                    onClick={() => setActiveWineSubCategory(subKey)}
-                    className={`px-4 py-2 rounded-xl text-xs font-medium tracking-wide whitespace-nowrap border transition-all duration-200 cursor-pointer shrink-0 ${
-                      activeWineSubCategory === subKey
-                      ? 'bg-[#D4AF37] border-[#D4AF37] text-black font-semibold shadow-md shadow-[#D4AF37]/20'
-                      : 'bg-white/[0.04] border-white/10 text-white/60 hover:text-white hover:bg-white/[0.08]'
-                    }`}
-                  >
-                    {t.subCategories[subKey]}
-                  </button>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {activeCategory === 'wine' && (
+            <div 
+              className="px-4 md:px-8 pb-4 flex items-center space-x-2 overflow-x-auto shrink-0 no-scrollbar"
+            >
+              {(Object.keys(t.subCategories) as WineSubCategoryType[]).map((subKey) => (
+                <button
+                  key={subKey}
+                  onClick={() => setActiveWineSubCategory(subKey)}
+                  className={`px-4 py-2 rounded-xl text-xs font-medium tracking-wide whitespace-nowrap border transition-all duration-200 cursor-pointer shrink-0 ${
+                    activeWineSubCategory === subKey
+                    ? 'bg-[#D4AF37] border-[#D4AF37] text-black font-semibold shadow-md shadow-[#D4AF37]/20'
+                    : 'bg-white/[0.04] border-white/10 text-white/60 hover:text-white hover:bg-white/[0.08]'
+                  }`}
+                >
+                  {t.subCategories[subKey]}
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* GRID OF ITEM CARDS */}
           <div className="flex-1 overflow-y-auto px-4 md:px-8 pb-32">
@@ -922,27 +913,21 @@ export default function App() {
                 )}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 pt-2">
-                  <AnimatePresence>
-                    {section.items.map((item) => {
-                      const isStopped = stopList[item.id];
-                      const hasStandardInCart = getItemQuantity(item.id, 'standard') > 0;
-                      const qtyStandard = getItemQuantity(item.id, 'standard');
+                  {section.items.map((item) => {
+                    const isStopped = stopList[item.id];
+                    const hasStandardInCart = getItemQuantity(item.id, 'standard') > 0;
+                    const qtyStandard = getItemQuantity(item.id, 'standard');
 
-                      return (
-                        <motion.div
-                          layout
-                          key={item.id}
-                          initial={{ opacity: 0, scale: 0.95 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.95 }}
-                          transition={{ duration: 0.25, ease: 'easeInOut' }}
-                          className={`relative rounded-3xl bg-white/[0.04] backdrop-blur-md border transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-xl shadow-black/20 ${
-                            isStopped ? 'opacity-40 border-transparent select-none' :
-                            (hasStandardInCart || getItemQuantity(item.id, 'glass') > 0 || getItemQuantity(item.id, 'bottle') > 0)
-                            ? 'border-[#D4AF37] shadow-lg shadow-[#D4AF37]/5 bg-white/[0.07]'
-                            : 'border-white/10 hover:border-white/20 hover:bg-white/[0.08]'
-                          }`}
-                        >
+                    return (
+                      <div
+                        key={item.id}
+                        className={`relative rounded-3xl bg-[#1E1E1E] border transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-xl shadow-black/20 ${
+                          isStopped ? 'opacity-40 border-transparent select-none' :
+                          (hasStandardInCart || getItemQuantity(item.id, 'glass') > 0 || getItemQuantity(item.id, 'bottle') > 0)
+                          ? 'border-[#D4AF37] shadow-lg shadow-[#D4AF37]/5 bg-[#252525]'
+                          : 'border-white/10 hover:border-white/20 hover:bg-[#252525]'
+                        }`}
+                      >
                           {/* Image or Premium Emoji Background */}
                           <div className="h-32 sm:h-44 w-full relative bg-black/40 overflow-hidden shrink-0 flex items-center justify-center">
                             {item.image ? (
@@ -1108,71 +1093,59 @@ export default function App() {
                             </div>
 
                           </div>
-                        </motion.div>
+                        </div>
                       );
                     })}
-                  </AnimatePresence>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* 7.3 STICKY FLOATING CART BAR (ANIMATED) */}
-          <AnimatePresence>
-            {totalCartCount > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: 100 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 100 }}
-                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-2xl bg-white/[0.04] backdrop-blur-xl border border-[#D4AF37]/60 rounded-3xl shadow-2xl shadow-black/40 p-4 flex items-center justify-between z-20 cursor-pointer"
-                onClick={() => setIsCartOpen(true)}
-              >
-                {/* Left details */}
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#D4AF37] text-black flex items-center justify-center shadow-lg shadow-[#D4AF37]/20">
-                    <ShoppingBag className="w-6 h-6 text-black" strokeWidth={2.5} />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-semibold tracking-wide text-white uppercase">
-                      {selectedLanguage === 'ka' ? "მონიშნულია: " : 
-                       selectedLanguage === 'ru' ? "Выбрано: " : "Selected: "}
-                      <span className="font-mono font-bold text-[#D4AF37]">{totalCartCount}</span>
-                    </h4>
-                    <p className="text-xs text-white/50">
-                      {selectedLanguage === 'ka' ? "დააჭირეთ დეტალების სანახავად" : 
-                       selectedLanguage === 'ru' ? "Нажмите для просмотра заказа" : "Tap to review selection"}
-                    </p>
-                  </div>
+          {/* 7.3 STICKY FLOATING CART BAR */}
+          {totalCartCount > 0 && (
+            <div
+              className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-2xl bg-[#1E1E1E] border border-[#D4AF37] rounded-3xl shadow-2xl shadow-black/40 p-4 flex items-center justify-between z-20 cursor-pointer transition-all duration-300 hover:bg-[#252525]"
+              onClick={() => setIsCartOpen(true)}
+            >
+              {/* Left details */}
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 rounded-xl bg-[#D4AF37] text-black flex items-center justify-center shadow-lg shadow-[#D4AF37]/20">
+                  <ShoppingBag className="w-6 h-6 text-black" strokeWidth={2.5} />
                 </div>
+                <div>
+                  <h4 className="text-sm font-semibold tracking-wide text-white uppercase">
+                    {selectedLanguage === 'ka' ? "მონიშნულია: " : 
+                     selectedLanguage === 'ru' ? "Выбрано: " : "Selected: "}
+                    <span className="font-mono font-bold text-[#D4AF37]">{totalCartCount}</span>
+                  </h4>
+                  <p className="text-xs text-white/50">
+                    {selectedLanguage === 'ka' ? "დააჭირეთ დეტალების სანახავად" : 
+                     selectedLanguage === 'ru' ? "Нажмите для просмотра заказа" : "Tap to review selection"}
+                  </p>
+                </div>
+              </div>
 
-                {/* Right price and click */}
-                <div className="flex items-center space-x-3">
-                  <span className="font-serif text-2xl font-bold text-[#D4AF37] font-mono shrink-0">
-                    {totalCartPrice}₾
-                  </span>
-                  <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-[#D4AF37]">
-                    <ChevronRight className="w-5 h-5" />
-                  </div>
+              {/* Right price and click */}
+              <div className="flex items-center space-x-3">
+                <span className="font-serif text-2xl font-bold text-[#D4AF37] font-mono shrink-0">
+                  {totalCartPrice}₾
+                </span>
+                <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-[#D4AF37]">
+                  <ChevronRight className="w-5 h-5" />
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              </div>
+            </div>
+          )}
 
         </main>
       </div>
 
       {/* --- 8. FULL-SCREEN ORDER SUMMARY MODAL --- */}
-      <AnimatePresence>
-        {isCartOpen && (
-          <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-40 flex justify-end animate-fadeIn">
-            <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 30, stiffness: 220 }}
-              className="w-full max-w-xl h-full bg-[#0F0F0F]/80 backdrop-blur-2xl border-l border-white/10 flex flex-col justify-between shadow-2xl z-50"
-            >
+      {isCartOpen && (
+        <div className="fixed inset-0 bg-black/90 z-40 flex justify-end">
+          <div
+            className="w-full max-w-xl h-full bg-[#121212] border-l border-white/10 flex flex-col justify-between shadow-2xl z-50 transition-all duration-300"
+          >
               {/* Modal Header */}
               <div className="px-6 py-5 border-b border-white/10 flex items-center justify-between bg-white/[0.02] backdrop-blur-md">
                 <div className="flex items-center space-x-3">
@@ -1300,21 +1273,16 @@ export default function App() {
                   </button>
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
         )}
-      </AnimatePresence>
 
       {/* --- 9. POS-STYLE PIN INPUT POPUP (Universal Overlay) --- */}
-      <AnimatePresence>
-        {isPinPadOpen && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/80 backdrop-blur-md z-50 animate-fadeIn">
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              className="w-full max-w-[320px] mx-4 bg-white/[0.04] backdrop-blur-2xl border border-white/10 rounded-3xl p-6 shadow-2xl relative"
-            >
+      {isPinPadOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/90 z-50">
+          <div 
+            className="w-full max-w-[320px] mx-4 bg-[#1A1A1A] border border-white/10 rounded-3xl p-6 shadow-2xl relative"
+          >
               <button 
                 onClick={() => { setIsPinPadOpen(false); setPinTarget(null); }}
                 className="absolute top-4 right-4 text-white/50 hover:text-white cursor-pointer"
@@ -1386,21 +1354,16 @@ export default function App() {
                   ⌫
                 </button>
               </div>
-            </motion.div>
+            </div>
           </div>
         )}
-      </AnimatePresence>
 
       {/* --- 10. HIDDEN / POPUP MANAGER ADMINISTRATIVE PANEL --- */}
-      <AnimatePresence>
-        {isAdminOpen && (
-          <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 md:p-8 overflow-hidden animate-fadeIn">
-            <motion.div 
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="w-full max-w-5xl h-full max-h-[90vh] bg-[#0F0F0F]/80 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-2xl flex flex-col justify-between overflow-hidden"
-            >
+      {isAdminOpen && (
+        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 md:p-8 overflow-hidden">
+          <div 
+            className="w-full max-w-5xl h-full max-h-[90vh] bg-[#121212] border border-white/10 rounded-3xl shadow-2xl flex flex-col justify-between overflow-hidden transition-all duration-300"
+          >
               
               {/* Admin Panel Header */}
               <div className="px-6 py-4 border-b border-white/10 bg-white/[0.02] backdrop-blur-md flex items-center justify-between">
@@ -1719,10 +1682,9 @@ export default function App() {
                 </button>
               </div>
 
-            </motion.div>
+            </div>
           </div>
         )}
-      </AnimatePresence>
 
     </div>
   );
